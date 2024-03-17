@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livret de Vie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            z-index: 999; /* Pour s'assurer que le header est au-dessus du contenu */
+        }
+        .logo {
+            width: 200px; /* Largeur des logos augmentée */
+            height: auto;
+        }
+        .title-container {
+            text-align: center;
+            margin-top: 80px; /* Ajuster pour éviter que le contenu soit caché derrière le header */
+        }
+        h1, h2 {
+            margin: 0;
+            color: #333333;
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 10px; /* Ajout d'une marge basse pour l'espace */
+        }
+        h2 {
+            font-size: 24px;
+        }
+        #qrcode {
+            margin-top: 20px;
+        }
+        .italic {
+            font-style: italic;
+            margin-top: 20px; /* Ajustement de la marge supérieure */
+            font-size: 120%; /* Agrandissement du texte en italique de 20% */
+            text-align: center; /* Centrer le texte */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img class="logo" src="esti.png" alt="Logo 1">
+        <img class="logo" src="sncf.png" alt="Logo 2">
+    </div>
+    <div class="title-container">
+        <h1>Livret de Vie</h1>
+        <h2 id="nom">LOCAL</h2>
+    </div>
+    <div id="qrcode">
+        <!-- L'image du QRCode sera insérée ici par JavaScript -->
+    </div>
+    <p class="italic">Merci de scanner ce QRCode afin d'accéder à l'application du livret de vie de ce local.</p>
+
+    <script>
+        // Récupération du paramètre d'URL "nom"
+        const params = new URLSearchParams(window.location.search);
+        const nom = params.get('nom');
+
+        // Mettre à jour le texte du h2 avec le paramètre "nom"
+        if (nom) {
+            document.getElementById('nom').innerText = nom;
+        }
+
+        // Récupération du paramètre d'URL "url"
+        const urlParam = params.get('url');
+
+        // Construction de l'URL pour le QRCode
+        if (urlParam) {
+            const qrCodeUrl = `https://chart.googleapis.com/chart?cht=qr&chs=400x400&chl=${encodeURIComponent(urlParam)}`;
+
+            // Création de l'élément img pour le QRCode
+            const qrCodeImg = document.createElement('img');
+            qrCodeImg.src = qrCodeUrl;
+            qrCodeImg.alt = 'QRCode';
+
+            // Ajout de l'image du QRCode à la div #qrcode
+            document.getElementById('qrcode').appendChild(qrCodeImg);
+        }
+    </script>
+</body>
+</html>
