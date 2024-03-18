@@ -41,7 +41,7 @@
             color: #333333;
         }
         h1 {
-            font-size: 36px;
+            font-size: 40px; /* Taille de police de 40px */
             margin-bottom: 10px; /* Ajout d'une marge basse pour l'espace */
         }
         h2 {
@@ -53,8 +53,19 @@
         .italic {
             font-style: italic;
             margin-top: 20px; /* Ajustement de la marge supérieure */
-            font-size: 120%; /* Agrandissement du texte en italique de 20% */
+            font-size: 130%; /* Agrandissement du texte en italique de 30% */
             text-align: center; /* Centrer le texte */
+        }
+        .additional-info {
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: center;
+            padding-top: 10px; /* Ajout d'un peu d'espace au-dessus du texte */
+        }
+        hr {
+            width: 100%; /* La ligne séparatrice fait toute la largeur de la page */
+            border: none;
+            border-top: 1px solid #ccc; /* Ajout d'une ligne horizontale */
         }
     </style>
 </head>
@@ -71,6 +82,8 @@
         <!-- L'image du QRCode sera insérée ici par JavaScript -->
     </div>
     <p class="italic">Merci de scanner ce QRCode afin d'accéder à l'application du livret de vie de ce local.</p>
+    <hr> <!-- Ligne séparatrice -->
+    <p class="additional-info" id="additionalInfo"></p>
 
     <script>
         // Récupération du paramètre d'URL "nom"
@@ -96,6 +109,18 @@
 
             // Ajout de l'image du QRCode à la div #qrcode
             document.getElementById('qrcode').appendChild(qrCodeImg);
+        }
+
+        // Récupération du paramètre d'URL "up"
+        const upParam = params.get('up');
+
+        // Récupération du paramètre d'URL "parcours"
+        const parcoursParam = params.get('parcours');
+
+        // Construction du texte "%UP% - %Parcours%" et ajout à la page
+        if (upParam && parcoursParam) {
+            const additionalInfoText = `${upParam} - ${parcoursParam}`;
+            document.getElementById('additionalInfo').innerText = additionalInfoText;
         }
     </script>
 </body>
