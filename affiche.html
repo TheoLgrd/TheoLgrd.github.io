@@ -53,7 +53,7 @@
         .italic {
             font-style: italic;
             margin-top: 20px; /* Ajustement de la marge supérieure */
-            font-size: 130%; /* Agrandissement du texte en italique de 30% */
+            font-size: 120%; /* Agrandissement du texte en italique de 20% */
             text-align: center; /* Centrer le texte */
         }
         .additional-info {
@@ -79,48 +79,41 @@
         <h2 id="nom">LOCAL</h2>
     </div>
     <div id="qrcode">
-        <!-- L'image du QRCode sera insérée ici par JavaScript -->
+        <!-- L'image du QRCode sera insérée ici -->
     </div>
     <p class="italic">Merci de scanner ce QRCode afin d'accéder à l'application du livret de vie de ce local.</p>
     <hr> <!-- Ligne séparatrice -->
     <p class="additional-info" id="additionalInfo"></p>
 
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator"></script>
     <script>
+        // Récupération du paramètre d'URL "url"
+        const urlParam = new URLSearchParams(window.location.search).get('url');
+
         // Récupération du paramètre d'URL "nom"
-        const params = new URLSearchParams(window.location.search);
-        const nom = params.get('nom');
+        const nom = new URLSearchParams(window.location.search).get('nom');
+
+        // Récupération des paramètres d'URL "up" et "parcours"
+        const upParam = new URLSearchParams(window.location.search).get('up');
+        const parcoursParam = new URLSearchParams(window.location.search).get('parcours');
+
+        // Construction du texte "%UP% - %Parcours%" et ajout à la page
+        if (upParam && parcoursParam) {
+            const additionalInfoText = `${upParam} - ${parcoursParam}`;
+            document.getElementById('additionalInfo').innerText = additionalInfoText;
+        }
 
         // Mettre à jour le texte du h2 avec le paramètre "nom"
         if (nom) {
             document.getElementById('nom').innerText = nom;
         }
 
-        // Récupération du paramètre d'URL "url"
-        const urlParam = params.get('url');
-
-        // Construction de l'URL pour le QRCode
+        // Générer le QRCode
         if (urlParam) {
-            const qrCodeUrl = `https://chart.googleapis.com/chart?cht=qr&chs=400x400&chl=${encodeURIComponent(urlParam)}`;
-
-            // Création de l'élément img pour le QRCode
-            const qrCodeImg = document.createElement('img');
-            qrCodeImg.src = qrCodeUrl;
-            qrCodeImg.alt = 'QRCode';
-
-            // Ajout de l'image du QRCode à la div #qrcode
-            document.getElementById('qrcode').appendChild(qrCodeImg);
-        }
-
-        // Récupération du paramètre d'URL "up"
-        const upParam = params.get('up');
-
-        // Récupération du paramètre d'URL "parcours"
-        const parcoursParam = params.get('parcours');
-
-        // Construction du texte "%UP% - %Parcours%" et ajout à la page
-        if (upParam && parcoursParam) {
-            const additionalInfoText = `${upParam} - ${parcoursParam}`;
-            document.getElementById('additionalInfo').innerText = additionalInfoText;
+            const qr = qrcode(0, 'M');
+            qr.addData(urlParam);
+            qr.make();
+            document.getElementById('qrcode').innerHTML = qr.createImgTag(8, 0); // Taille de 400x400
         }
     </script>
 </body>
