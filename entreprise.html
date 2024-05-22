@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livret de Vie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            z-index: 999; /* Pour s'assurer que le header est au-dessus du contenu */
+        }
+        .logo {
+            width: 200px; /* Largeur des logos augmentée */
+            height: auto;
+        }
+        .title-container {
+            text-align: center;
+            margin-top: 80px; /* Ajuster pour éviter que le contenu soit caché derrière le header */
+        }
+        h1, h2 {
+            margin: 0;
+            color: #333333;
+        }
+        h1 {
+            font-size: 40px; /* Taille de police de 40px */
+            margin-bottom: 10px; /* Ajout d'une marge basse pour l'espace */
+        }
+        h2 {
+            font-size: 24px;
+        }
+        #qrcode {
+            margin-top: 20px;
+        }
+        .italic {
+            font-style: italic;
+            margin-top: 20px; /* Ajustement de la marge supérieure */
+            font-size: 120%; /* Agrandissement du texte en italique de 20% */
+            text-align: center; /* Centrer le texte */
+        }
+        .additional-info {
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: center;
+            padding-top: 10px; /* Ajout d'un peu d'espace au-dessus du texte */
+        }
+        hr {
+            width: 100%; /* La ligne séparatrice fait toute la largeur de la page */
+            border: none;
+            border-top: 1px solid #ccc; /* Ajout d'une ligne horizontale */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img class="logo" src="esti.png" alt="Logo 1">
+        <img class="logo" src="sncf.png" alt="Logo 2">
+    </div>
+    <div class="title-container">
+        <h1>Livret de Vie - Entreprises extérieures</h1>
+        <h2 id="nom">LOCAL</h2>
+    </div>
+    <div id="qrcode">
+        <!-- L'image du QRCode sera insérée ici -->
+    </div>
+    <p class="italic">Merci de scanner ce QRCode afin d'accéder au formulaire d'enregistrement du livret de vie de ce local.</p>
+    <hr> <!-- Ligne séparatrice -->
+    <p class="additional-info" id="additionalInfo"></p>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator"></script>
+    <script>
+	// Récupération du paramètre d'URL "url"
+        const id = new URLSearchParams(window.location.search).get('id');
+
+        // Récupération du paramètre d'URL "url"
+        const urlParam = new URLSearchParams(window.location.search).get('url');
+
+        // Récupération du paramètre d'URL "nom"
+        const nom = new URLSearchParams(window.location.search).get('nom');
+
+        // Récupération des paramètres d'URL "up" et "parcours"
+        const upParam = new URLSearchParams(window.location.search).get('up');
+        const parcoursParam = new URLSearchParams(window.location.search).get('parcours');
+
+        // Construction du texte "%UP% - %Parcours%" et ajout à la page
+        if (upParam && parcoursParam) {
+            const additionalInfoText = `${upParam} - ${parcoursParam}`;
+            document.getElementById('additionalInfo').innerText = additionalInfoText;
+        }
+
+        // Mettre à jour le texte du h2 avec le paramètre "nom"
+        if (nom) {
+            document.getElementById('nom').innerText = nom + " - Numéro de local: <b>" + id + "</b>";
+        }
+
+        // Générer le QRCode
+        if (urlParam) {
+            const qr = qrcode(0, 'M');
+            qr.addData(urlParam);
+            qr.make();
+            document.getElementById('qrcode').innerHTML = qr.createImgTag(8, 0); // Taille de 400x400
+        }
+    </script>
+</body>
+</html>
